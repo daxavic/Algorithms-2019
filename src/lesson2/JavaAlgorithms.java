@@ -170,8 +170,9 @@ public class JavaAlgorithms {
      * Остальные символы ни в файле, ни в словах не допускаются.
      */
 
-    static private boolean searchWord(ArrayList<String> field, int i, int j, String word, int order) {
-        if (i < 0 || j < 0 || i >= field.size() || j >= field.get(0).length()) return false;
+    static private boolean searchWord(ArrayList<String[]> field, int i, int j, String word, int order) {
+        if (i < 0 || j < 0 || i >= field.size() || j >= field.get(0).length) return false;
+
         if (order == word.length()) return true;
         if (searchWord(field, i - 1, j, word, order + 1) ||
                 searchWord(field, i + 1, j, word, order + 1) ||
@@ -184,7 +185,7 @@ public class JavaAlgorithms {
     static public Set<String> baldaSearcher(String inputName, Set<String> words) throws IOException, NullPointerException {
 
 
-        ArrayList<String> field = null;
+        ArrayList<String[]> field = null;
         int weight = 0;
         int high = 0;
         Set<String> result = new HashSet<>();
@@ -200,11 +201,11 @@ public class JavaAlgorithms {
                     throw new IllegalArgumentException();
                 }
 
-                field.add(str.replace(" ", ""));
+                field.add(str.split(" "));
                 str = reader.readLine();
             }
 
-            weight = field.get(0).length();
+            weight = field.get(0).length;
             high = field.size();
         } catch (IOException e) {
             e.printStackTrace();
@@ -217,7 +218,7 @@ public class JavaAlgorithms {
             boolean nowWord = false;
             for (int i = 0; i < weight; i++) {
                 for (int j = 0; j < high; j++) {
-                    nowWord = searchWord((ArrayList<String>) field, i, j, word, 0);
+                    nowWord = searchWord((ArrayList<String[]>) field, i, j, word, 0);
                     if (nowWord) break;
                 }
                 if (nowWord) break;
