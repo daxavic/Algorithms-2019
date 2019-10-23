@@ -3,7 +3,9 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
+import java.io.IOException;
 import java.util.Set;
+import java.util.TreeSet;
 
 @SuppressWarnings("unused")
 public class JavaAlgorithms {
@@ -84,9 +86,16 @@ public class JavaAlgorithms {
      * Общий комментарий: решение из Википедии для этой задачи принимается,
      * но приветствуется попытка решить её самостоятельно.
      */
-    static public int josephTask(int menNumber, int choiceInterval) {
-        throw new NotImplementedError();
+    static public int josephTask(int menNumber, int choiceInterval)
+    {
+        int result = 0;
+        for (int i = 1; i <= menNumber; i++) {
+            result = (result + choiceInterval) % i;
+        }
+        return result + 1;
     }
+   /* Время: O(N), N = menNumber
+     Память: O(1)*/
 
     /**
      * Наибольшая общая подстрока.
@@ -94,18 +103,33 @@ public class JavaAlgorithms {
      *
      * Дано две строки, например ОБСЕРВАТОРИЯ и КОНСЕРВАТОРЫ.
      * Найти их самую длинную общую подстроку -- в примере это СЕРВАТОР.
-     * Если общих подстрок нет, вернуть пустую строку.
+     * Если общих подстрок нет, вернуть пустую строк у.
      * При сравнении подстрок, регистр символов *имеет* значение.
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
-    static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+    static public String longestCommonSubstring(String first, String second) throws IOException {
+        int maxLength = 0;
+        String maxStr = "";
+        int firstLength = first.length();
+        int secondLength = second.length();
+        for (int i = 0; i < firstLength; i++) {
+            int k = i;
+            while ((second.contains(first.substring(i, k))) && (k < firstLength)) {
+                k++;
+            }
+            if ((k - i) > maxLength) {
+                maxLength = k - i;
+                maxStr = first.substring(i, k - 1);
+            } ;
+        }
+        return maxStr;
     }
 
+     /* Время: O(N*M), N - количество символов в first, M - количество символов в second*/
+
     /**
-     * Число простых чисел в интервале
-     * Простая
+      * Простая
      *
      * Рассчитать количество простых чисел в интервале от 1 до limit (включительно).
      * Если limit <= 1, вернуть результат 0.
