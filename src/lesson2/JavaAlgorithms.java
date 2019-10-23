@@ -172,6 +172,8 @@ public class JavaAlgorithms {
 
     static private boolean searchWord(ArrayList<String[]> field, int i, int j, String word, int order) {
         if (i < 0 || j < 0 || i >= field.size() || j >= field.get(0).length) return false;
+        if (!(field.get(i)[j].equals(word.substring(order, order + 1))))
+            return false;
 
         if (order == word.length()) return true;
         if (searchWord(field, i - 1, j, word, order + 1) ||
