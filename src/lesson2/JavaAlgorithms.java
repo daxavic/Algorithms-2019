@@ -3,10 +3,8 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -190,8 +188,8 @@ public class JavaAlgorithms {
         Set<String> result = new HashSet<>();
 
         try {
-            File file = new File(inputName);
-            FileReader fr = new FileReader(file);
+            FileInputStream file = new FileInputStream(inputName);
+            InputStreamReader fr = new InputStreamReader(file, StandardCharsets.UTF_8);
             BufferedReader reader = new BufferedReader(fr);
             String str = reader.readLine();
 
@@ -227,3 +225,7 @@ public class JavaAlgorithms {
         return result;
     }
 }
+/* Время: O(weight * high * words.size),
+     Память: O(weight * high * words.size)*/
+
+
