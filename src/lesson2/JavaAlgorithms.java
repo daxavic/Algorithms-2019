@@ -181,7 +181,9 @@ public class JavaAlgorithms {
     }
 
 
-    static public Set<String> baldaSearcher(String inputName, Set<String> words) throws IOException {
+    static public Set<String> baldaSearcher(String inputName, Set<String> words) throws IOException, NullPointerException {
+
+
         ArrayList<String> field = null;
         int weight = 0;
         int high = 0;
