@@ -10,7 +10,7 @@ import java.util.*;
 public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implements CheckableSortedSet<T> {
 
     private static class Node<T> {
-        final T value;
+        T value;
 
         Node<T> left = null;
 
@@ -71,11 +71,40 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     /**
      * Удаление элемента в дереве
      * Средняя
+     *Трудоемкость - O(n), n - height()
+     * Ресурсоемкость - О(1)
      */
     @Override
     public boolean remove(Object o) {
-        // TODO
-        throw new NotImplementedError();
+        if (o == null || !contains(o)) return false;
+        Node<T> node = new Node<>((T) o);
+        root = removePr(root,(T) o);
+        size--;
+        return true;
+    }
+
+    private Node<T> removePr (Node<T> node, T value) {
+        if (node == null) return null;
+        if (value.compareTo(node.value) < 0) node.left = removePr(node.left, value);
+        if (value.compareTo(node.value) > 0) node.right = removePr(node.right, value);
+        if (value.compareTo(node.value) == 0 ) node = removeIn(node);
+        return node;
+    }
+
+    private Node <T> removeIn (Node <T> node) {
+        if (node.left == null) return  node.right;
+        if (node.right == null) return  node.left;
+        Node<T> mainNode = new Node<T>(minNode(node.right).value);
+        mainNode.left = node.left;
+        mainNode.right = node.right;
+        node = mainNode;
+        node.right = removePr(node.right, node.value);
+        return node;
+    }
+
+    private Node<T> minNode (Node<T> node) {
+        while (node.left != null) node = node.left;
+        return node;
     }
 
     @Override
@@ -106,40 +135,68 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         }
     }
 
+
     public class BinaryTreeIterator implements Iterator<T> {
+        private Node<T> current;
+        private Stack<Node<T>> nodes;
 
         private BinaryTreeIterator() {
-            // Добавьте сюда инициализацию, если она необходима
+            nodes = new Stack<>();
+            current = root;
+            while (current != null){
+                nodes.push(current);
+                current = current.left;
+            }
         }
 
         /**
          * Проверка наличия следующего элемента
          * Средняя
+         *
+         *  *
+         * Трудоемкость - O(n), n - height()
+         * Ресурсоемкость - О(1)
          */
         @Override
         public boolean hasNext() {
-            // TODO
-            throw new NotImplementedError();
+           return nodes.size() > 0;
         }
 
         /**
          * Поиск следующего элемента
          * Средняя
+         *
+         * Трудоемкость - O(n), n - height()
+         * Ресурсоемкость - О(1)
          */
         @Override
         public T next() {
-            // TODO
-            throw new NotImplementedError();
+            current = nodes.pop();
+            Node<T> node = current;
+            if (node == null) throw new NotImplementedError();
+            if (node.right != null) {
+                node = node.right;
+                while (node != null) {
+                    nodes.push(node);
+                    node = node.left;
+                }
+            }
+            return current.value;
+
+
         }
 
         /**
          * Удаление следующего элемента
          * Сложная
+         * Трудоемкость - O(n), n - height()
+         *  Ресурсоемкость - О(1)
          */
         @Override
         public void remove() {
-            // TODO
-            throw new NotImplementedError();
+            if (current != null) root = removePr(root, current.value);
+            else  throw new NotImplementedError();
+            size--;
         }
     }
 
@@ -168,8 +225,22 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
-        // TODO
-        throw new NotImplementedError();
+        SortedSet<T> set = new TreeSet<>();
+        if (fromElement.compareTo(toElement) <= 0) return subSetPr(this.root, fromElement, toElement, set);
+        else return set;
+    }
+
+    private SortedSet<T> subSetPr (Node<T> node, T fromElement, T toElement, SortedSet set){
+        T root = node.value;
+        int fromEl = fromElement.compareTo(root);
+        int toEl = toElement.compareTo(root);
+        if (fromEl <= 0 && toEl >= 0 ) {
+            set.add(root);
+            if (node.left != null) subSetPr(node.left, fromElement, toElement, set);
+            if (node.right!= null) subSetPr(node.right, fromElement,toElement,set);
+        }
+
+        return set;
     }
 
     /**
@@ -190,8 +261,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        // TODO
-        throw new NotImplementedError();
+        return subSet(fromElement, last());
     }
 
     @Override
