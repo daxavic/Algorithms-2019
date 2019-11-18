@@ -239,6 +239,8 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             if (node.left != null) subSetPr(node.left, fromElement, toElement, set);
             if (node.right!= null) subSetPr(node.right, fromElement,toElement,set);
         }
+        if (toEl < 0 && node.left != null) subSetPr(node.left, fromElement, toElement, set);
+        if (fromEl > 0 && node.right != null) subSetPr(node.right, fromElement, toElement, set);
 
         return set;
     }
