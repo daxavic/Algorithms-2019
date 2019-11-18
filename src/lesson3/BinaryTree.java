@@ -230,7 +230,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return set;
     }
 
-    private SortedSet<T> subSetPr (Node<T> node, T fromElement, T toElement, SortedSet set){
+    private SortedSet<T> subSetPr (Node<T> node, T fromElement, T toElement, SortedSet<T> set){
         T root = node.value;
         int fromEl = fromElement.compareTo(root);
         int toEl = toElement.compareTo(root);
@@ -249,22 +249,41 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     /**
      * Найти множество всех элементов меньше заданного
      * Сложная
+     *
+     *  Трудоемкость - O(n), n - height()
+     *  Ресурсоемкость - О(n)
      */
     @NotNull
     @Override
     public SortedSet<T> headSet(T toElement) {
-        // TODO
-        throw new NotImplementedError();
+        SortedSet<T> setTo = new TreeSet<>();
+        BinaryTreeIterator it = new BinaryTreeIterator();
+        while (it.hasNext())
+        {
+            T node = it.next();
+            if (node.compareTo(toElement) < 0) setTo.add(node);
+        }
+        return setTo;
     }
 
     /**
      * Найти множество всех элементов больше или равных заданного
      * Сложная
+     *
+     * Трудоемкость - O(n), n - height()
+     *  Ресурсоемкость - О(n)
      */
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        return subSet(fromElement, last());
+        SortedSet<T> setFrom = new TreeSet<>();
+       BinaryTreeIterator it = new BinaryTreeIterator();
+       while (it.hasNext())
+       {
+           T node = it.next();
+           if (node.compareTo(fromElement) >= 0) setFrom.add(node);
+       }
+        return setFrom;
     }
 
     @Override
