@@ -227,7 +227,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     public SortedSet<T> subSet(T fromElement, T toElement) {
         SortedSet<T> set = new TreeSet<>();
         if (fromElement.compareTo(toElement) <= 0) return subSetPr(this.root, fromElement, toElement, set);
-        else return set;
+        return set;
     }
 
     private SortedSet<T> subSetPr (Node<T> node, T fromElement, T toElement, SortedSet set){
@@ -240,7 +240,8 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             if (node.right!= null) subSetPr(node.right, fromElement,toElement,set);
         }
         if (toEl > 0 && node.left != null) subSetPr(node.left, fromElement, toElement, set);
-        if (fromEl < 0 && node.right != null) subSetPr(node.right, fromElement, toElement, set);
+        else
+            if (fromEl < 0 && node.right != null) subSetPr(node.right, fromElement, toElement, set);
 
         return set;
     }
