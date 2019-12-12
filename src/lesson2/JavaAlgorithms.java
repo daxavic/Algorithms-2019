@@ -184,53 +184,9 @@ public class JavaAlgorithms {
     }
 
 
-    static public Set<String> baldaSearcher(String inputName, Set<String> words) throws IOException, NullPointerException {
-
-
-        ArrayList<String[]> field = null;
-        int weight = 0;
-        int high = 0;
-        Set<String> result = new HashSet<>();
-
-        try {
-            FileInputStream file = new FileInputStream(inputName);
-            InputStreamReader fr = new InputStreamReader(file, StandardCharsets.UTF_8);
-            BufferedReader reader = new BufferedReader(fr);
-            String str = reader.readLine();
-
-            while (str != null) {
-                if (!str.matches("([A-ZА-ЯЁ] )+[A-ZА-ЯЁ]")) {
-                    throw new IllegalArgumentException();
-                }
-
-                field.add(str.split(" "));
-                str = reader.readLine();
-            }
-
-            weight = field.get(0).length;
-            high = field.size();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        for (String word : words) {
-            if (!word.matches("[A-ZА-ЯЁ]+")) {
-                throw new IllegalArgumentException();
-            }
-            boolean nowWord = false;
-            for (int i = 0; i < weight; i++) {
-                for (int j = 0; j < high; j++) {
-                    nowWord = searchWord((ArrayList<String[]>) field, i, j, word, 0);
-                    if (nowWord) break;
-                }
-                if (nowWord) break;
-            }
-            if (nowWord) result.add(word);
-        }
-        return result;
+    static public Set<String> baldaSearcher(String inputName, Set<String> words) {
+        throw new NotImplementedError();
     }
 }
-/* Время: O(weight * high * words.size),
-     Память: O(weight * high * words.size)*/
 
 
