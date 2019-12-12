@@ -2,6 +2,8 @@ package lesson6;
 
 import kotlin.NotImplementedError;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -17,9 +19,38 @@ public class JavaDynamicTasks {
      * Если общей подпоследовательности нет, вернуть пустую строку.
      * Если есть несколько самых длинных общих подпоследовательностей, вернуть любую из них.
      * При сравнении подстрок, регистр символов *имеет* значение.
-     */
-    public static String longestCommonSubSequence(String first, String second) {
-        throw new NotImplementedError();
+     * Время: O(N*M), N = длина первой сторки; M - длина второй строки
+     * Память: O(N*M)  N = длина первой сторки; M - длина второй строки */
+    public static String longestCommonSubSequence(String first, String second)throws IOException {
+        int firstLength = first.length();
+        int secondLength = second.length();
+        char character;
+        int left;
+        String result = "";
+        int length = secondLength;
+        int height = firstLength;
+        int [][] massive = new int[secondLength + 1][firstLength + 1];
+        for (int i = 1; i <= secondLength; i++){
+            character = second.charAt(i - 1);
+            for (int j = 1; j <= firstLength; j++) {
+                char firstWord = first.charAt(j - 1);
+                if (character == first.charAt(j - 1)) massive[i][j] = massive[i - 1] [j - 1] + 1;
+                else {
+                    massive[i][j] = Math.max(massive[i - 1][j], massive[i][j - 1]);
+                }
+            }
+        }
+        while (massive [length][height] > 0) {
+            if (massive[length][height] == massive[length - 1][height]) length--;
+            else
+                if (massive[length][height] == massive[length][height - 1]) height--;
+                else {
+                    length--;
+                    height--;
+                    result = first.charAt(height) + result;
+                }
+        }
+        return result;
     }
 
     /**
@@ -33,9 +64,39 @@ public class JavaDynamicTasks {
      * Если самых длинных возрастающих подпоследовательностей несколько (как в примере),
      * то вернуть ту, в которой числа расположены раньше (приоритет имеют первые числа).
      * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
-     */
-    public static List<Integer> longestIncreasingSubSequence(List<Integer> list) {
-        throw new NotImplementedError();
+     * Время: O(N^2), N = длина списка
+     * Память: O(N) N = длина списка*/
+    public static List<Integer> longestIncreasingSubSequence(List<Integer> list) throws IOException {
+        int size = list.size();
+        int[] massive = new int[size];
+
+        if (size == 0 || size == 1) return list;
+
+        List<Integer> result = new ArrayList<>();
+        int[] parentInd = new int[list.size()];
+        int lastInd = 0;
+        int maxSeq = 1;
+
+        for (int i = 0; i < list.size(); i++){
+            massive[i] = 1;
+            for (int j = 0; j < i; j++){
+                if (list.get(j) < list.get(i) && massive[j] >= massive[i]) {
+                    massive[i] = massive[j] + 1;
+                    parentInd[i] = j;
+                    }
+                }
+                if (massive[i] > maxSeq) {
+                    lastInd = i;
+                    maxSeq = massive[i];
+                }
+        }
+
+        while (maxSeq > 0){
+            result.add(0,list.get(lastInd));
+            lastInd = parentInd[lastInd];
+            maxSeq--;
+        }
+        return result;
     }
 
     /**

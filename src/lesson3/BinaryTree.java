@@ -172,9 +172,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         @Override
         public T next() {
             current = nodes.pop();
+            if (current == null) throw new NoSuchElementException();
             Node<T> node = current;
-            if (node == null) throw new NotImplementedError();
-            if (node.right != null) {
+           if (node.right != null) {
                 node = node.right;
                 while (node != null) {
                     nodes.push(node);
@@ -194,8 +194,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public void remove() {
-            if (current != null) root = removePr(root, current.value);
-            else  throw new NotImplementedError();
+            root = removePr(root, current.value);
             size--;
         }
     }
